@@ -1,11 +1,11 @@
 package org.example;
 
 interface ShapeMath {
-    abstract double getHeight();
+    double getHeight() throws Exception;
 
-    abstract double getWidth();
+    double getWidth() throws Exception;
 
-    abstract double getArea();
+    double getArea() throws Exception;
 
-    abstract double getPerimeter();
+    double getPerimeter() throws Exception;
 }
