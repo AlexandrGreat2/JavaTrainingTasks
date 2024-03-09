@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class PhoneNumberValidator {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+//        System.out.println("Hello world!");
         validatePhoneNumbers("F:\\java\\javaTrainingTasks\\JavaTrainingTasks\\Module10\\src\\main\\java\\org\\example\\file.txt");
     }
 
