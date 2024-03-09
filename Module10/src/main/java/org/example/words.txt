@@ -1,0 +1,13 @@
+the day is sunny the the
+the sunny is is
+3. JSON in Java [package org.json]
+The JSON - Java library also known as org.json (not to be confused with Google’s org.json.simple) provides us with classes that are used to parse and manipulate JSON in Java.
+Furthermore, this library can also convert between JSON, XML, HTTP Headers, Cookies, Comma Delimited List or Text, etc.
+In this tutorial, we’ll have a look at the following classes:
+JSONObject – similar to Java’s native Map-like object, which stores unordered key-value pairs
+JSONArray – an ordered sequence of values similar to Java’s native Vector implementation
+JSONTokener – a tool that breaks a piece of text into a series of tokens that can be used by JSONObject or JSONArray to parse JSON strings
+CDL – a tool that provides methods to convert comma delimited text into a JSONArray and vice versa
+Cookie – converts from JSON String to cookies and vice versa
+HTTP – used to convert from JSON String to HTTP headers and vice versa
+JSONException – a standard exception thrown by this library
