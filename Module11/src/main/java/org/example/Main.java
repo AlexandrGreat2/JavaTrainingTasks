@@ -10,9 +10,10 @@ public class Main {
         Thread thread3 = new Thread(fizzBuzz::fizzbuzz);
         Thread thread4 = new Thread(fizzBuzz::number);
 
+        thread4.start();
         thread1.start();
         thread2.start();
         thread3.start();
-        thread4.start();
+
     }
 }
