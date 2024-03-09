@@ -57,23 +57,25 @@ public class UserToJson {
 
         }
     }
-}
 
-class User {
-    private String name;
-    private int age;
 
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
+    //try to do immutable class
+    static class User {
+        private final String name;
+        private final int age;
 
-    // Getters
-    public String getName() {
-        return name;
-    }
+        public User(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
 
-    public int getAge() {
-        return age;
+        // Getters
+        public String getName() {
+            return name;
+        }
+
+        public int getAge() {
+            return age;
+        }
     }
 }
