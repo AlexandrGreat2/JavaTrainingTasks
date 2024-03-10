@@ -9,6 +9,8 @@ public class FizzBuzz {
     private int currentNumber = 1;
     private Object lock = new Object();
 
+    private LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
+
     public FizzBuzz(int n) {
         this.n = n;
     }
@@ -17,7 +19,7 @@ public class FizzBuzz {
         while (currentNumber <= n) {
             synchronized (lock) {
                 if (currentNumber % 3 == 0 && currentNumber % 5 != 0) {
-                    System.out.println("fizz");
+                    queue.offer("fizz");
                     currentNumber++;
                     lock.notifyAll();
                 }
@@ -29,7 +31,7 @@ public class FizzBuzz {
         while (currentNumber <= n) {
             synchronized (lock) {
                 if (currentNumber % 5 == 0 && currentNumber % 3 != 0) {
-                    System.out.println("buzz");
+                    queue.offer("buzz");
                     currentNumber++;
                     lock.notifyAll();
                 }
@@ -41,7 +43,7 @@ public class FizzBuzz {
         while (currentNumber <= n) {
             synchronized (lock) {
                 if (currentNumber % 3 == 0 && currentNumber % 5 == 0) {
-                    System.out.println("fizzbuzz");
+                    queue.offer("fizzbuzz");
                     currentNumber++;
                     lock.notifyAll();
                 }
@@ -50,20 +52,32 @@ public class FizzBuzz {
     }
 
     public void number() {
+
+
         while (currentNumber <= n) {
             synchronized (lock) {
-                if (currentNumber % 3 != 0 && currentNumber % 5 != 0) {
-                    System.out.println(currentNumber);
-                    currentNumber++;
-                    lock.notifyAll();
+                try {
+                    if (currentNumber % 3 != 0 && currentNumber % 5 != 0) {
+                        queue.offer(String.valueOf(currentNumber));
+                        currentNumber++;
+                        lock.notifyAll();
+                    }
+                } catch (Exception ignored) {
+
                 }
             }
+        }
+
+    }
+
+    public void printQueue() throws InterruptedException {
+        for (int i = 1; i <= n; i++) {
+            System.out.println(queue.take());
         }
     }
 
     public static void main(String[] args) {
         FizzBuzz fizzBuzz = new FizzBuzz(15);
-
         Thread threadA = new Thread(fizzBuzz::fizz);
         Thread threadB = new Thread(fizzBuzz::buzz);
         Thread threadC = new Thread(fizzBuzz::fizzbuzz);
@@ -73,5 +87,11 @@ public class FizzBuzz {
         threadB.start();
         threadC.start();
         threadD.start();
+        try {
+            fizzBuzz.printQueue();
+        } catch (InterruptedException ignored) {
+
+        }
+
     }
 }
