@@ -1,9 +1,11 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,19 +42,23 @@ public class UserToJson {
 
     private static void writeUsersToJsonFile(List<User> users, String outputFileName) {
         try (FileWriter writer = new FileWriter(outputFileName)) {
-            writer.write("[\n");
-            int iteration = 0;
-            String commaText = ",%n";
-            for (User user : users) {
-                if(iteration != 0) {
-                    writer.write(String.format(",%n"));
-                }
-                iteration++;
-                writer.write(String.format("    {\n        \"name\": \"%s\",\n        \"age\": %d\n    }",
-                        user.getName(), user.getAge()));
-            }
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(users);
 
-            writer.write("\n]");
+            System.out.println(json);
+            writer.write(json);
+//            writer.write("[\n");
+//            int iteration = 0;
+//            String commaText = ",%n";
+//            for (User user : users) {
+//                if(iteration != 0) {
+//                    writer.write(String.format(",%n"));
+//                }
+//                iteration++;
+//                writer.write(String.format("    {\n        \"name\": \"%s\",\n        \"age\": %d\n    }",
+//                        user.getName(), user.getAge()));
+//            }
+//         writer.write("\n]");
         } catch (Exception ignored) {
 
         }
