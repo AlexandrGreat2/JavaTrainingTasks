@@ -113,12 +113,12 @@ public class ApiClient {
         try {
             //System.out.println("postsJson="+postsJson);
             UserPost[] userPosts = new Gson().fromJson(postsJson, new TypeToken<UserPost[]>() {}.getType());
-            System.out.println("=============== debug ==================");
+            System.out.println("------------ debug -------------");
             System.out.println(Arrays.toString(userPosts));
             for (UserPost userPost : userPosts) {
                 System.out.println("userPost.getPostId="+userPost.toString());
             }
-            System.out.println("=============== end debug ==================");
+            System.out.println("------------ end debug ------------");
 //            UserPosts userPosts = new Gson().fromJson(postsJson, UserPosts.class);
 //            System.out.println("userPosts="+userPosts);
             if (userPosts.length > 0) {
@@ -139,6 +139,7 @@ public class ApiClient {
         ApiClient apiClient = new ApiClient();
         System.out.println("start");
         try {
+            System.out.println("============= Task 1 ==============");
             // Task 1
             String newUser = apiClient.createUser("{\"name\":\"Test1 Test2\",\"username\":\"test1test2\",\"email\":\"test1test2@example.com\"}");
             System.out.println("Created user: " + newUser);
@@ -159,6 +160,7 @@ public class ApiClient {
             System.out.println("User by username: " + userByUsername);
 
             // Task 2
+            System.out.println("============= Task 2 ==============");
             String commentsForLastPost = apiClient.getAllCommentsForLastPostOfUser(1);
             System.out.println("Comments for last post: " + commentsForLastPost);
 
@@ -166,6 +168,7 @@ public class ApiClient {
             System.out.println("Comments written to file.");
 
             // Task 3
+            System.out.println("============= Task 3 ==============");
             String openTodosForUser = apiClient.getAllOpenTodosForUser(1);
             System.out.println("Open todos for user: " + openTodosForUser);
         } catch (Exception e) {
