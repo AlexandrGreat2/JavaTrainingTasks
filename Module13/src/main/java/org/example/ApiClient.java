@@ -112,19 +112,19 @@ public class ApiClient {
         int result = -1;
         try {
             //System.out.println("postsJson="+postsJson);
-            Person[] persons = new Gson().fromJson(postsJson, new TypeToken<Person[]>() {}.getType());
+            UserPost[] userPosts = new Gson().fromJson(postsJson, new TypeToken<UserPost[]>() {}.getType());
             System.out.println("=============== debug ==================");
-            System.out.println(Arrays.toString(persons));
-            for (Person person : persons) {
-                System.out.println("person.getPostId="+person.toString());
+            System.out.println(Arrays.toString(userPosts));
+            for (UserPost userPost : userPosts) {
+                System.out.println("userPost.getPostId="+userPost.toString());
             }
             System.out.println("=============== end debug ==================");
-//            Persons persons = new Gson().fromJson(postsJson, Persons.class);
-//            System.out.println("persons="+persons);
-            if (persons.length > 0) {
-                Person person = persons[persons.length - 1];
-                System.out.println("person.getPostId=" + person.getPostId());
-                return person.getPostId();
+//            UserPosts userPosts = new Gson().fromJson(postsJson, UserPosts.class);
+//            System.out.println("userPosts="+userPosts);
+            if (userPosts.length > 0) {
+                UserPost userPost = userPosts[userPosts.length - 1];
+                System.out.println("userPost.getPostId=" + userPost.getPostId());
+                return userPost.getPostId();
             }
             //todo: rewrite with GSON library
 //            System.out.println(postsJson.substring(postsJson.lastIndexOf("\"id\":") + 5, postsJson.indexOf(",", postsJson.lastIndexOf("\"id\":"))));
@@ -175,26 +175,26 @@ public class ApiClient {
 }
 
 
-class Persons {
-    public Person[] persons;
+class UserPosts {
+    public UserPost[] userPosts;
 
-    Persons(Person[] persons) {
-        this.persons = persons;
+    UserPosts(UserPost[] userPosts) {
+        this.userPosts = userPosts;
     }
 
-    public Person[] getPersons() {
-        return persons;
+    public UserPost[] getUserPosts() {
+        return userPosts;
     }
 
-    public void setPersons(Person[] persons) {
-        this.persons = persons;
+    public void setUserPosts(UserPost[] userPosts) {
+        this.userPosts = userPosts;
     }
 }
 
 /**
  *
  */
-class Person {
+class UserPost {
 
     private int postId;
     private int id;
@@ -202,7 +202,7 @@ class Person {
     private String email;
     private String body;
 
-    public Person(int postId, int id, String name, String email, String body){
+    public UserPost(int postId, int id, String name, String email, String body){
         this.postId = postId;
         this.id = id;
         this.name = name;
@@ -252,7 +252,7 @@ class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "UserPost{" +
                 "id='" + id + '\'' +
                 "postId='" + postId + '\'' +
                 "name='" + name + '\'' +
