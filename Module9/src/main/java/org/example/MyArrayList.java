@@ -8,15 +8,15 @@ public class MyArrayList<T> {
     private int pointer = 0;
 
     public void add(T item) {
-        if(pointer >= array.length-1)
+        if (pointer >= array.length - 1)
             resize(array.length * this.resizeArrayMultiply);
         array[pointer++] = item;
     }
 
     //convert and return element with same type
     public T get(int index) {
-        if (array[index] == null) {
-            return null;
+        if (index < 0 || index >= pointer) {
+            throw new IndexOutOfBoundsException("Invalid index: " + index);
         }
         //todo: Why next sting mark as "Unchecked cast: 'java.lang.Object' to 'T' " ?
         return (T) array[index];
@@ -24,15 +24,17 @@ public class MyArrayList<T> {
 
     //remove element from list
     public void remove(int index) {
-        if (array[index] != null) {
-
-            for (int i = index; i < pointer; i++)
-                array[i] = array[i + 1];
-            array[pointer] = null;
-            pointer--;
-            if (array.length > startArraySize && pointer < array.length / resizeArrayRate)
-                resize(array.length / this.resizeArrayMultiply);
+        if (index < 0 || index >= pointer) {
+            throw new IndexOutOfBoundsException("Invalid index: " + index);
         }
+
+        for (int i = index; i < pointer; i++)
+            array[i] = array[i + 1];
+        array[pointer] = null;
+        pointer--;
+        if (array.length > startArraySize && pointer < array.length / resizeArrayRate)
+            resize(array.length / this.resizeArrayMultiply);
+
     }
 
     //return size
@@ -49,7 +51,7 @@ public class MyArrayList<T> {
 
     private void clear() {
         resize(startArraySize);
-        for (int i = 0; i<startArraySize; i++) {
+        for (int i = 0; i < startArraySize; i++) {
             array[i] = null;
         }
         pointer = 0;
