@@ -1,5 +1,7 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
@@ -9,6 +11,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ApiClient {
 
@@ -108,13 +111,28 @@ public class ApiClient {
     public int extractLastPostId(String postsJson) {
         int result = -1;
         try {
+            //System.out.println("postsJson="+postsJson);
+            Person[] persons = new Gson().fromJson(postsJson, new TypeToken<Person[]>() {}.getType());
+            System.out.println("=============== debug ==================");
+            System.out.println(Arrays.toString(persons));
+            for (Person person : persons) {
+                System.out.println("person.getPostId="+person.toString());
+            }
+            System.out.println("=============== end debug ==================");
+//            Persons persons = new Gson().fromJson(postsJson, Persons.class);
+//            System.out.println("persons="+persons);
+            if (persons.length > 0) {
+                Person person = persons[persons.length - 1];
+                System.out.println("person.getPostId=" + person.getPostId());
+                return person.getPostId();
+            }
             //todo: rewrite with GSON library
-            System.out.println(postsJson.substring(postsJson.lastIndexOf("\"id\":") + 5, postsJson.indexOf(",", postsJson.lastIndexOf("\"id\":"))));
-            result = Integer.parseInt(postsJson.substring(postsJson.lastIndexOf("\"id\":") + 5, postsJson.indexOf(",", postsJson.lastIndexOf("\"id\":"))).trim());
+//            System.out.println(postsJson.substring(postsJson.lastIndexOf("\"id\":") + 5, postsJson.indexOf(",", postsJson.lastIndexOf("\"id\":"))));
+//            result = Integer.parseInt(postsJson.substring(postsJson.lastIndexOf("\"id\":") + 5, postsJson.indexOf(",", postsJson.lastIndexOf("\"id\":"))).trim());
         } catch (NumberFormatException e){
             e.printStackTrace();
         }
-        return result;
+        return -1;
     }
 
     public static void main(String[] args) throws IOException {
@@ -122,7 +140,7 @@ public class ApiClient {
         System.out.println("start");
         try {
             // Task 1
-            String newUser = apiClient.createUser("{\"name\":\"John Doe\",\"username\":\"johndoe\",\"email\":\"johndoe@example.com\"}");
+            String newUser = apiClient.createUser("{\"name\":\"Test1 Test2\",\"username\":\"test1test2\",\"email\":\"test1test2@example.com\"}");
             System.out.println("Created user: " + newUser);
 
             String updatedUser = apiClient.updateUser(1, "{\"name\":\"Updated Name\",\"username\":\"updatedusername\",\"email\":\"updatedemail@example.com\"}");
@@ -153,5 +171,94 @@ public class ApiClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+}
+
+
+class Persons {
+    public Person[] persons;
+
+    Persons(Person[] persons) {
+        this.persons = persons;
+    }
+
+    public Person[] getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Person[] persons) {
+        this.persons = persons;
+    }
+}
+
+/**
+ *
+ */
+class Person {
+
+    private int postId;
+    private int id;
+    private String name;
+    private String email;
+    private String body;
+
+    public Person(int postId, int id, String name, String email, String body){
+        this.postId = postId;
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.body = body;
+    }
+
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id='" + id + '\'' +
+                "postId='" + postId + '\'' +
+                "name='" + name + '\'' +
+                "email='" + email + '\'' +
+                //too long to show here
+                //"body='" + body + '\'' +
+                '}';
     }
 }
