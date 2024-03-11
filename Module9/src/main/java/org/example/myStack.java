@@ -15,6 +15,9 @@ public class myStack<T> extends MyArrayList {
 
     public T pop() {
         T result = (T) super.get(super.size()-1);
+        if (result == null) {
+            return null;
+        }
         super.remove(super.size()-1);
         return result;
     }
