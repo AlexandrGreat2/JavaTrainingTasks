@@ -1,123 +1,96 @@
 package org.example;
 
-public class MyLinkedList<T> {
-    private Node lastNode = null;
-    private Node firstNode = null;
-    private int pointer = 0;
-    private int listSize = 0;
+public class MyLinkedList<S> {
 
-    public void add(T item) throws Exception {
-        Node newNode;
-        if ( firstNode == null && lastNode == null ) {
-            newNode = new Node( item );
-            firstNode = newNode;
-        } else {
-            newNode = new Node( item, lastNode.getPrev() );
+    private Node head;
+    private Node tail;
+    private int size;
+
+    public MyLinkedList() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    private static class Node {
+        Object data;
+        Node prev;
+        Node next;
+
+        public Node(Object data) {
+            this.data = data;
+            this.prev = null;
+            this.next = null;
         }
-        lastNode = newNode;
-        listSize++;
-        pointer++;
+    }
+
+    public void add(Object value) {
+        Node newNode = new Node(value);
+        if (size == 0) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode.prev = tail;
+            tail.next = newNode;
+            tail = newNode;
+        }
+        size++;
     }
 
     public void remove(int index) {
-        Node currentNode = firstNode;
-        for (int i = 0; i<index; i++) {
-            currentNode = currentNode.getNext();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Invalid index: " + index);
         }
-        Node prev = currentNode.getPrev();
-        Node next = currentNode.getNext();
-        next.setPrev(prev);
-        prev.setNext(next);
-        currentNode.setPrev(null);
-        currentNode.setNext(null);
-        listSize--;
+
+        Node currentNode = getNodeAtIndex(index);
+
+        if (currentNode.prev == null) {
+            head = currentNode.next;
+        } else {
+            currentNode.prev.next = currentNode.next;
+        }
+
+        if (currentNode.next == null) {
+            tail = currentNode.prev;
+        } else {
+            currentNode.next.prev = currentNode.prev;
+        }
+
+        size--;
     }
 
     public void clear() {
-        listSize = 0;
-        pointer = 0;
-        lastNode = null;
-        firstNode = null;
+        head = null;
+        tail = null;
+        size = 0;
     }
 
-    //return size
     public int size() {
-        return listSize;
+        return size;
     }
 
-    //convert and return element with same type
-    public T get(int index) {
-        Node currentNode = firstNode;
-        if (index == 0) {
-            return (T) currentNode.getData();
+    public Object get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Invalid index: " + index);
         }
-        for (int i = 0; i<index; i++) {
-            currentNode = currentNode.getNext();
-        }
-        return (T) currentNode.getData();
+
+        Node currentNode = getNodeAtIndex(index);
+        return currentNode.data;
     }
 
-
-//    private Node getPreLastNode(){
-//        if (lastNode != null) {
-//            return lastNode.getPrev();
-//        } else {
-//            return null;
-//        }
-//    }
-
-    static class Node {
-        private Object o;
-        private Node next;
-        private Node prev;
-
-        //to create first node object
-        public Node(Object o) throws Exception {
-            if (o != null) {
-                this.o = o;
-                next = null;
-                prev = null;
-//                System.out.println("0= " + o + " +1= " + next + " -1= " + prev);
-            } else {
-                throw new Exception("Null element not allowed");
+    private Node getNodeAtIndex(int index) {
+        Node currentNode;
+        if (index < size / 2) {
+            currentNode = head;
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.next;
+            }
+        } else {
+            currentNode = tail;
+            for (int i = size - 1; i > index; i--) {
+                currentNode = currentNode.prev;
             }
         }
-
-        //to create not first node object
-        public Node(Object o, Node prev) throws Exception {
-            if (o == null)
-                throw new Exception("Null element not allowed");
-            this.o = o;
-            if (prev != null) {
-                this.prev = prev;
-                this.next = null;
-                this.prev.setPrev(this);
-//                System.out.println("0= " + o + " +1= " + next + " -1= " + prev);
-            } else {
-                throw new Exception("Null element not allowed");
-            }
-
-        }
-
-        public Object getData() {
-            return o;
-        }
-
-        public Node getNext() {
-            return next;
-        }
-
-        public Node getPrev() {
-            return prev;
-        }
-
-        public void setNext(Node next) {
-            this.next = next;
-        }
-
-        public void setPrev(Node prev) {
-            this.prev = prev;
-        }
+        return currentNode;
     }
-
 }

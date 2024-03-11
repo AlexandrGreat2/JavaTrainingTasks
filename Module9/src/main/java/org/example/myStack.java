@@ -1,39 +1,21 @@
 package org.example;
 
-public class myStack<T> {
-    MyLinkedList linkedList = new MyLinkedList<T>();
-    private int size = 0;
+public class myStack<T> extends MyArrayList {
 
     public void push(T item) throws Exception {
-        linkedList.add(item);
-        size++;
-    }
+        super.add(item);
 
-    public void remove(int index) {
-        linkedList.remove(index);
-        size++;
-    }
-
-    private void clear() {
-        linkedList.clear();
-        size = 0;
-    }
-
-    //return size
-    public int size() {
-        return size;
     }
 
     //convert and return element with same type
     public T peek() {
-        return (T) linkedList.get(size-1);
+        return (T) super.get(super.size()-1);
     }
 
 
     public T pop() {
-        T result = (T) linkedList.get(size-1);
-        linkedList.remove(size-1);
-        size--;
+        T result = (T) super.get(super.size()-1);
+        super.remove(super.size()-1);
         return result;
     }
 }

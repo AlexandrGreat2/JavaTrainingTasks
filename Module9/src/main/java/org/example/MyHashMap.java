@@ -1,115 +1,112 @@
 package org.example;
 
 public class MyHashMap {
-    private Node firstNode = null;
-    private int pointer = 0;
-    private int size = 0;
 
-    public void put(Object key, Object value) throws Exception {
-        Node currentNode = firstNode;
-        if (firstNode == null) {
-            firstNode = new Node(key,value);
-            size++;
-        } else {
-            for (int i = 0; i < size; i++) {
-                currentNode = firstNode.getNext();
-                if (currentNode.getKay() == key) {
-                    currentNode.setData(key,value);
-                    break;
-                } else {
-                    if (i == size - 1) {
-                        currentNode.setNext(new Node(key,value));
-                        size++;
-                    }
-                }
-            }
+    private static final int DEFAULT_CAPACITY = 16;
+    private Node[] table;
+    private int size;
+
+    public MyHashMap() {
+        this.table = new Node[DEFAULT_CAPACITY];
+        this.size = 0;
+    }
+
+    private static class Node {
+        Object key;
+        Object value;
+        Node next;
+
+        public Node(Object key, Object value) {
+            this.key = key;
+            this.value = value;
+            this.next = null;
         }
     }
 
-    public void remove(Object key) {
-        Node currentNode = firstNode;
-        Node prevNode = null;
-        for (int i = 0; i < size; i++) {
-            prevNode = currentNode;
-            currentNode = firstNode.getNext();
-            if (currentNode.getKay() == key) {
-                prevNode.setNext(currentNode.getNext());
-                currentNode.setNext(null);
-                currentNode.setData(null, null);
-                size--;
-                break;
+    public void put(Object key, Object value) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+
+        int index = getIndex(key);
+        Node newNode = new Node(key, value);
+
+        if (table[index] == null) {
+            table[index] = newNode;
+        } else {
+            Node current = table[index];
+            while (current.next != null) {
+                if (current.key.equals(key)) {
+                    current.value = value; // Update existing key
+                    return;
+                }
+                current = current.next;
             }
+            if (current.key.equals(key)) {
+                current.value = value; // Update existing key
+            } else {
+                current.next = newNode;
+            }
+        }
+
+        size++;
+    }
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+
+        int index = getIndex(key);
+        Node current = table[index];
+
+        while (current != null) {
+            if (current.key.equals(key)) {
+                return current.value;
+            }
+            current = current.next;
+        }
+
+        return null; // Key not found
+    }
+
+    public void remove(Object key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
+
+        int index = getIndex(key);
+        Node current = table[index];
+        Node prev = null;
+
+        while (current != null) {
+            if (current.key.equals(key)) {
+                if (prev == null) {
+                    table[index] = current.next;
+                } else {
+                    prev.next = current.next;
+                }
+                size--;
+                return;
+            }
+            prev = current;
+            current = current.next;
         }
     }
 
     public void clear() {
-        Node currentNode = firstNode;
-        Node prevNode = null;
-        for (int i = 0; i < size; i++) {
-            prevNode = currentNode;
-            currentNode = firstNode.getNext();
-            prevNode.setNext(null);
-            prevNode.setData(null, null);
-            size--;
+        for (int i = 0; i < table.length; i++) {
+            table[i] = null;
         }
-        firstNode = null;
         size = 0;
     }
 
-    //return size
     public int size() {
         return size;
     }
 
-
-    public Object get(Object key) {
-        Node currentNode = firstNode;
-        for (int i = 0; i < size; i++) {
-            currentNode = firstNode.getNext();
-            if (currentNode.getKay() == key) {
-                return currentNode.getData();
-            }
-        }
-        return null;
-    }
-
-
-    static class Node {
-        private Object o;
-        private Node next;
-        private Object key;
-
-        //to create first node object
-        public Node(Object key, Object o) throws Exception {
-            if (o != null) {
-                this.o = o;
-                this.key = key;
-                next = null;
-            } else {
-                throw new Exception("Null element not allowed");
-            }
-        }
-
-        public Object getData() {
-            return o;
-        }
-
-        public Node getNext() {
-            return next;
-        }
-
-        public Object getKay() {
-            return key;
-        }
-
-        public void setData(Object key, Object o) {
-            this.o = o;
-            this.key = key;
-        }
-
-        public void setNext(Node next) {
-            this.next = next;
-        }
+    private int getIndex(Object key) {
+        return key.hashCode() % table.length;
     }
 
 }
